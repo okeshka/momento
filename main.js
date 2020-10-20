@@ -4,8 +4,12 @@ const time = document.getElementById('time');
 const greting = document.getElementById('greting');
 const name = document.getElementById('name');
 const focus = document.getElementById('focus');
+const date = document.getElementById('date');
 
 const showAmPm = true;
+
+const dayWeek = ['Monday', 'Tuesday', 'Wendesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+const monthNumber = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
 //Show Time
 
@@ -14,6 +18,9 @@ function showTime() {
     let hour = today.getHours();
     let minutes = today.getMinutes();
     let seconds = today.getSeconds();
+    let dayNumber = today.getDay();
+    let day = today.getDate();
+    let month = today.getMonth();
 
     //Set AM or PM
 
@@ -26,7 +33,9 @@ function showTime() {
     // Output time
 
     time.innerHTML = `${hour}<span>:</span>${addZero(minutes)}<span>:</span>${addZero(seconds)} ${showAmPm ? amPm : ''}`;
+    date.innerHTML = `${dayWeek[dayNumber]}<span>, <span>${day} ${monthNumber[month]}`;
     setTimeout(showTime, 1000);
+    
 }
 
 //Add zero
