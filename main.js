@@ -9,7 +9,7 @@ const date = document.getElementById('date');
 const showAmPm = true;
 
 const dayWeek = ['Monday', 'Tuesday', 'Wendesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-const monthNumber = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+const monthNumber = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 //Show Time
 
@@ -24,15 +24,15 @@ function showTime() {
 
     //Set AM or PM
 
-    const amPm = hour >=12 ? 'PM' : 'AM';
+    //const amPm = hour >=12 ? 'PM' : 'AM';
 
     //12hr format
 
-    hour = hour % 12 || 12;
+    //hour = hour % 12 || 12;
     
     // Output time
 
-    time.innerHTML = `${hour}<span>:</span>${addZero(minutes)}<span>:</span>${addZero(seconds)} ${showAmPm ? amPm : ''}`;
+    time.innerHTML = `${hour}<span>:</span>${addZero(minutes)}<span>:</span>${addZero(seconds)}`;
     date.innerHTML = `${dayWeek[dayNumber]}<span>, <span>${day} ${monthNumber[month]}`;
     setTimeout(showTime, 1000);
     
@@ -48,20 +48,25 @@ function addZero(n) {
 function setBgGret() {
     let today = new Date();
     let hour = today.getHours();
-    if (hour < 12) {
+    
+    if (6 < hour && hour < 12) {
         //Morning
        document.body.style.backgroundImage = "url('https://i.ibb.co/7vDLJFb/morning.jpg')";
        greting.textContent = 'Good Morning';
-    } else if (hour < 18) {
+    } else if (12 < hour && hour < 18) {
         //Afternoon
         document.body.style.backgroundImage = "url('https://i.ibb.co/3mThcXc/afternoon.jpg')";
        greting.textContent = 'Good Afternoon';
-    } else {
+    } else if (12 < hour && hour < 24) {
         //evening
       document.body.style.backgroundImage = "url('https://i.ibb.co/924T2Wv/night.jpg')";
       greting.textContent = 'Good Evening';
         document.body.style.color = 'white';
-    }    
+    } else {
+        document.body.style.backgroundImage = "url('https://cf.bstatic.com/images/hotel/max1024x768/140/140829170.jpg')";
+        greting.textContent = 'Good Night';
+        document.body.style.color = 'white';
+    }   
 }
 
 //getName
@@ -78,12 +83,16 @@ function setName(event) {
     if (event.type === "keypress") {
         //Make sure "Enter" is pressed
         if(event.which == 13 || event.keyCode == 13) {
-            localStorage.setItem('name', event.target.innerText);
+            event.target.innerText === '' ? 
+                getName() :
+                localStorage.setItem('name', event.target.innerText);
             name.blur();
         }
     }
     else {
-        localStorage.setItem('name', event.target.innerText)
+        event.target.innerText === '' ? 
+            getName() :
+            localStorage.setItem('name', event.target.innerText);
     }
 }
 
@@ -101,20 +110,30 @@ function setFocus(event) {
     if (event.type === "keypress") {
         //Make sure "Enter" is pressed
         if(event.which == 13 || event.keyCode == 13) {
-            localStorage.setItem('focus', event.target.innerText);
+            event.target.innerText === '' ? 
+                getFocus() :
+                localStorage.setItem('focus', event.target.innerText);
             focus.blur();
         }
     }
     else {
-        localStorage.setItem('focus', event.target.innerText)
-    }
+        event.target.innerText === '' ? 
+            getFocus() :
+            localStorage.setItem('focus', event.target.innerText)
+    }   
+}
+
+function clickName(event) {
+    event.target.innerText = ''; 
 }
 
 
+name.addEventListener('click', clickName);
 name.addEventListener('keypress', setName);
 name.addEventListener('blur', setName);
 focus.addEventListener('keypress', setFocus);
 focus.addEventListener('blur', setFocus);
+focus.addEventListener('click', clickName);
 //Run baby run
 
 showTime();
