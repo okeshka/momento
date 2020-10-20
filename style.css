@@ -1,0 +1,35 @@
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Lemonada', cursive;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100vh;
+    color: orange;
+}
+
+#time {
+    font-size: 8rem;
+}
+
+h1 {
+    margin-bottom: 3rem;
+}
+
+h2 {
+    margin-bottom: 0.5rem;
+    opacity: 0.6;
+}
+
+@media (max-width: 768px){
+    #time {
+        font-size: 6rem;
+    }
+}
