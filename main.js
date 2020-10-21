@@ -24,6 +24,8 @@ const temperature = document.querySelector('.temperature');
 const humidity = document.querySelector('.humidity');
 const city = document.querySelector('.city');
 const windSpeed = document.body.querySelector('.wind-speed');
+
+const resetButton = document.getElementById('reset');
 //Show Time
 
 function showTime() {
@@ -154,6 +156,11 @@ function reloadImagewithClosure() {
 
 const reloadImage = reloadImagewithClosure();
 
+//Run 
+showTime();
+setBgGret();
+getName();
+getFocus();
 
 name.addEventListener('click', clickName);
 name.addEventListener('keypress', setName);
@@ -163,44 +170,77 @@ focus.addEventListener('blur', setFocus);
 focus.addEventListener('click', clickName);
 btn.addEventListener('click', reloadImage);
 
-
-
 async function getQuote() {  
     const url = `https://cors-anywhere.herokuapp.com/https://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en`;
     const res = await fetch(url);
     const data = await res.json(); 
     blockquote.textContent = data.quoteText;
     figcaption.textContent = data.quoteAuthor;
-  }
-
-//Run 
-showTime();
-setBgGret();
-getName();
-getFocus();
-
+}
 
 document.addEventListener('DOMContentLoaded', getQuote);
 button.addEventListener('click', getQuote);
 
+let iconClass;
 async function getWeather() {  
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${city.textContent}&lang=en&appid=08f2a575dda978b9c539199e54df03b0&units=metric`;
     const res = await fetch(url);
     const data = await res.json(); 
-    weatherIcon.classList.add(`owf-${data.weather[0].id}`);
+    iconClass = `owf-${data.weather[0].id}`;
+    weatherIcon.classList.add(iconClass);
     temperature.textContent = `${data.main.temp}°C`;
     humidity.textContent = `${data.main.humidity}%`;
     windSpeed.textContent = `${data.wind.speed}m/sec`;
 }
 
-getWeather();
-
-function setCity(event) {
-    if (event.code === 'Enter') {
-      getWeather();
-      city.blur();
+function getCity() {
+    if (localStorage.getItem('city') === null) {
+        city.textContent = '[Enter You City For Wheather Forecast]';
+    } else {
+        city.textContent = localStorage.getItem('city');
+        getWeather();
     }
 }
 
-document.addEventListener('DOMContentLoaded', getWeather);
+function setCity(event) {
+    if (event.type === "keypress") {
+        //Make sure "Enter" is pressed
+        if(event.which == 13 || event.keyCode == 13) {
+            if (event.target.innerText === '' ) {getCity()}
+                else {
+                    localStorage.setItem('city', event.target.innerText);
+                    getWeather();
+                }
+            city.blur();
+        }
+    }
+    else {
+        if (event.target.innerText === '') {getCity()}
+            else {
+                localStorage.setItem('city', event.target.innerText);
+                getWeather();
+            }
+    }
+}
+
+function clickCity(event) {
+    event.target.innerText = ''; 
+}
+
+document.addEventListener('DOMContentLoaded', getCity);
 city.addEventListener('keypress', setCity);
+city.addEventListener('blur', setCity);
+city.addEventListener('click', clickCity);
+
+resetButton.addEventListener('click', () => {
+    localStorage.removeItem('name');
+    localStorage.removeItem('focus');
+    localStorage.removeItem('city');
+    getName();
+    getFocus();
+    getCity();
+    temperature.textContent = '';
+    humidity.textContent = '';
+    windSpeed.textContent = '';
+    weatherIcon.classList.remove(iconClass);
+})
