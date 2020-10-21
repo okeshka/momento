@@ -5,12 +5,25 @@ const greting = document.getElementById('greting');
 const name = document.getElementById('name');
 const focus = document.getElementById('focus');
 const date = document.getElementById('date');
+const btn = document.body.querySelector('.btn');
+
+const blockquote = document.querySelector('blockquote');
+const figcaption = document.querySelector('figcaption');
+const button = document.getElementById('btn');
 
 const showAmPm = true;
 
 const dayWeek = ['Monday', 'Tuesday', 'Wendesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 const monthNumber = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const baseUrl = "./images/all/";
+const images = ['0.jpg', '1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg', '6.jpg', '7.jpg', '8.jpg', '9.jpg', '10.jpg', '11.jpg', '12.jpg', 
+                '13.jpg', '14.jpg', '15.jpg', '16.jpg', '17.jpg', '18.jpg', '19.jpg', '20.jpg', '21.jpg', '22.jpg', '23.jpg'];
 
+const weatherIcon = document.querySelector('.weather-icon');
+const temperature = document.querySelector('.temperature');
+const humidity = document.querySelector('.humidity');
+const city = document.querySelector('.city');
+const windSpeed = document.body.querySelector('.wind-speed');
 //Show Time
 
 function showTime() {
@@ -48,23 +61,21 @@ function addZero(n) {
 function setBgGret() {
     let today = new Date();
     let hour = today.getHours();
-    
-    if (6 < hour && hour < 12) {
+    let bgUrl = baseUrl + images[hour];
+    document.body.style.backgroundImage = `url(${bgUrl})`;
+
+    if (6 <= hour && hour < 12) {
         //Morning
-       document.body.style.backgroundImage = "url('https://i.ibb.co/7vDLJFb/morning.jpg')";
-       greting.textContent = 'Good Morning';
-    } else if (12 < hour && hour < 18) {
+       greting.textContent = 'Good Morning, ';
+    } else if (12 <= hour && hour < 18) {
         //Afternoon
-        document.body.style.backgroundImage = "url('https://i.ibb.co/3mThcXc/afternoon.jpg')";
-       greting.textContent = 'Good Afternoon';
-    } else if (12 < hour && hour < 24) {
+       greting.textContent = 'Good Afternoon, ';
+    } else if (18 <= hour && hour < 24) {
         //evening
-      document.body.style.backgroundImage = "url('https://i.ibb.co/924T2Wv/night.jpg')";
-      greting.textContent = 'Good Evening';
+      greting.textContent = 'Good Evening, ';
         document.body.style.color = 'white';
     } else {
-        document.body.style.backgroundImage = "url('https://cf.bstatic.com/images/hotel/max1024x768/140/140829170.jpg')";
-        greting.textContent = 'Good Night';
+        greting.textContent = 'Good Night, ';
         document.body.style.color = 'white';
     }   
 }
@@ -128,16 +139,68 @@ function clickName(event) {
 }
 
 
+function reloadImagewithClosure() {
+    let today = new Date();
+    let hour = today.getHours();
+    return () => {
+    hour = hour + 1;
+    if (hour > 23) hour = hour - 24;
+    let bgUrl = baseUrl + images[hour];
+    document.body.style.backgroundImage = `url(${bgUrl})`;
+    btn.disabled = true;
+    setTimeout(function() { btn.disabled = false }, 1000);
+    }
+}
+
+const reloadImage = reloadImagewithClosure();
+
+
 name.addEventListener('click', clickName);
 name.addEventListener('keypress', setName);
 name.addEventListener('blur', setName);
 focus.addEventListener('keypress', setFocus);
 focus.addEventListener('blur', setFocus);
 focus.addEventListener('click', clickName);
-//Run baby run
+btn.addEventListener('click', reloadImage);
 
+
+
+async function getQuote() {  
+    const url = `https://cors-anywhere.herokuapp.com/https://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en`;
+    const res = await fetch(url);
+    const data = await res.json(); 
+    blockquote.textContent = data.quoteText;
+    figcaption.textContent = data.quoteAuthor;
+  }
+
+//Run 
 showTime();
 setBgGret();
 getName();
 getFocus();
 
+
+document.addEventListener('DOMContentLoaded', getQuote);
+button.addEventListener('click', getQuote);
+
+async function getWeather() {  
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city.textContent}&lang=en&appid=08f2a575dda978b9c539199e54df03b0&units=metric`;
+    const res = await fetch(url);
+    const data = await res.json(); 
+    weatherIcon.classList.add(`owf-${data.weather[0].id}`);
+    temperature.textContent = `${data.main.temp}°C`;
+    humidity.textContent = `${data.main.humidity}%`;
+    windSpeed.textContent = `${data.wind.speed}m/sec`;
+}
+
+getWeather();
+
+function setCity(event) {
+    if (event.code === 'Enter') {
+      getWeather();
+      city.blur();
+    }
+}
+
+document.addEventListener('DOMContentLoaded', getWeather);
+city.addEventListener('keypress', setCity);

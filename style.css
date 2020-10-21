@@ -2,6 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    color: black;
 }
 
 body {
@@ -12,11 +13,16 @@ body {
     justify-content: center;
     text-align: center;
     height: 100vh;
-    color: orange;
+    background-size: cover;
+    transition: background-image 1s ease-in-out;
 }
 
 #time {
     font-size: 8rem;
+}
+
+#date{
+    font-size: 2rem;
 }
 
 h1 {
@@ -25,11 +31,80 @@ h1 {
 
 h2 {
     margin-bottom: 0.5rem;
-    opacity: 0.6;
+    opacity: 0.8;
 }
 
-@media (max-width: 768px){
+.forecast {
+    display: flex;
+    column-gap: 2rem;
+}
+
+@media (max-width: 768px) {
     #time {
         font-size: 6rem;
     }
 }
+
+@media (max-width: 420px) {
+    #time {
+        font-size: 4rem;
+    }
+    #greting, #name, #date, h2 {
+        font-size: 1rem;
+    }
+}
+
+.btn {
+    width: 60px;
+    height: 60px;
+    border: 0;
+    flex-shrink: 0;
+    background: url("./images/button.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    filter: grayscale(1);
+    margin: 10px;
+  }
+  .btn:hover {
+    filter: grayscale(.8);
+  }
+  .btn:active,
+  .btn:focus {
+    outline: 0;
+  }
+  
+  .btn:active{
+    transform: scale(1.02)
+  }
+  .btn:disabled{
+      opacity: 0.3;
+  }
+
+  .quote {
+    font: 1.2rem Georgia, serif;
+    margin: 10px;
+    background: #eee;
+    padding: 1em;
+    border-radius: 1em;
+    opacity: 0.5;
+  }
+  .quote figcaption,
+  .quote blockquote {
+    margin: 1em;
+  }
+  .quote figcaption {
+    text-align: right;
+  }
+
+  @media (max-width: 420px) {
+   .btn {
+       width: 40px;
+       height: 40px;;
+   }
+   
+}
+
+.city, .temperature, .humidity, .wind-speed {
+    color: white;
+}
+

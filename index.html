@@ -4,20 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Lemonada&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./owfont-master/css/owfont-regular.css">
     <link rel="stylesheet" href="style.css">
     <title>Momento</title>
 </head>
 <body>
+
 <time id="time"></time>
 <div id="date"></div>
 <h1>
     <span id="greting"></span>
     <span id="name" contenteditable = "true">Oleg</span>
 </h1>
-<h2>
-    What Is Your Focus For Today
-</h2>
-<h2 id="focus" contenteditable = "true">good mood</h2>
+<button type ="button" class = "btn"></button>
+<h2>What Is Your Focus For Today?</h2>
+<h2 id="focus" contenteditable = "true"></h2>
+<button id = "btn" class="btn"></button>
+
+<figure class="quote">
+  <blockquote>
+    You were not born a winner, and you were not born a loser. You are what you make yourself be.
+  </blockquote>
+  <figcaption> 
+    Lou Holtz
+  </figcaption>
+</figure>
+
+<div class="city" contenteditable="true">Kyiv</div>
+<i class="weather-icon owf"></i>
+<div class="forecast">
+    <div class="temperature">temperature</div>
+    <div class="humidity">humdity</div>
+    <div class="wind-speed">wind-speed</div>
+</div>
 
 <script src = "main.js"></script>
 </body>
